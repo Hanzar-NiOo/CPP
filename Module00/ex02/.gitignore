@@ -1,4 +1,5 @@
 MyProgram
+my_log
 *.o
 *.log
 sudo.txt
