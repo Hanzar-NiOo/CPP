@@ -21,6 +21,7 @@ void    PhoneBook::print_contacts(int search_idx) const
 			<< std::setw(10) << "First name" << "|"
 			<< std::setw(10) << "Last name" << "|"
 			<< std::setw(10) << "Nickname" << "|"
+			<< std::setw(10) << "Darkest secret" << "|"
 			<< std::endl;
 
 	std::cout << std::right
@@ -28,6 +29,7 @@ void    PhoneBook::print_contacts(int search_idx) const
 			<< std::setw(10) << truncate(contacts[search_idx - 1].get_firstname()) << "|"
 			<< std::setw(10) << truncate(contacts[search_idx - 1].get_lastname()) << "|"
 			<< std::setw(10) << truncate(contacts[search_idx - 1].get_nickname()) << "|"
+			<< std::setw(10) << truncate(contacts[search_idx - 1].get_darksecret()) << "|"
 			<< std::endl;
 }
 
@@ -57,14 +59,14 @@ static void	get_input(std::string content, std::string &input)
 		else
 		{
 			bool is_all_whitespace = true;
-			for (unsigned char ch : input) 
-            {
-                if (!std::isspace(ch)) 
-                {
-                    is_all_whitespace = false;
-                    break;
-                }
-            }
+			for (size_t i = 0; i < input.size(); i++)
+			{
+				if (!std::isspace((unsigned char)input[i]))
+				{
+					is_all_whitespace = false;
+					break;
+				}
+			}
 			if (is_all_whitespace) 
             {
                 std::cout << "Invalid input. Please try again." << std::endl;

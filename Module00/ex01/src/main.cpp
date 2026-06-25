@@ -19,6 +19,7 @@ int	main(void)
 		}
 		else if (action == "SEARCH")
 		{
+			phonebook.print_all_contacts();
 			std::cout << "Index of the contact : ";
 			std::cin >> search_idx;
 			phonebook.search_contact(search_idx);
