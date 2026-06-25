@@ -26,6 +26,7 @@ void    PhoneBook::print_all_contacts() const
         << std::setw(10) << "First name" << "|"
         << std::setw(10) << "Last name" << "|"
         << std::setw(10) << "Nickname" << "|"
+		<< std::setw(15) << "Darkest secret" << "|"
         << std::endl;
     for (int i = 0; i < count; i++)
     {
@@ -34,6 +35,7 @@ void    PhoneBook::print_all_contacts() const
             << std::setw(10) << truncate(contacts[i].get_firstname()) << "|"
             << std::setw(10) << truncate(contacts[i].get_lastname()) << "|"
             << std::setw(10) << truncate(contacts[i].get_nickname()) << "|"
+			<< std::setw(15) << truncate(contacts[i].get_darksecret()) << "|"
             << std::endl;
     }
 }
@@ -45,7 +47,7 @@ void    PhoneBook::print_contacts(int search_idx) const
 			<< std::setw(10) << "First name" << "|"
 			<< std::setw(10) << "Last name" << "|"
 			<< std::setw(10) << "Nickname" << "|"
-			<< std::setw(10) << "Darkest secret" << "|"
+			<< std::setw(15) << "Darkest secret" << "|"
 			<< std::endl;
 
 	std::cout << std::right
@@ -53,7 +55,7 @@ void    PhoneBook::print_contacts(int search_idx) const
 			<< std::setw(10) << truncate(contacts[search_idx - 1].get_firstname()) << "|"
 			<< std::setw(10) << truncate(contacts[search_idx - 1].get_lastname()) << "|"
 			<< std::setw(10) << truncate(contacts[search_idx - 1].get_nickname()) << "|"
-			<< std::setw(10) << truncate(contacts[search_idx - 1].get_darksecret()) << "|"
+			<< std::setw(15) << truncate(contacts[search_idx - 1].get_darksecret()) << "|"
 			<< std::endl;
 }
 
