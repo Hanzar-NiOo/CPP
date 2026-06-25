@@ -15,7 +15,7 @@ int	main(int argc, char **argv)
 			idx = 0;
 			while (argv[arg_idx][idx])
 			{
-				char upper = toupper(argv[arg_idx][idx]);
+				unsigned char upper = toupper(argv[arg_idx][idx]);
 				std::cout << upper;
 				idx++;
 			}
