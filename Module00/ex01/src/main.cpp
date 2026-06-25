@@ -4,7 +4,7 @@
 int	main(void)
 {
 	std::string	action;
-	std::string	xline(45, 'x');
+	// std::string	xline(45, 'x');
 	int			search_idx;
 	PhoneBook	phonebook;
 
@@ -15,15 +15,23 @@ int	main(void)
 		if (action == "ADD")
 		{
 			phonebook.add_contact();
-			std::cout << xline << std::endl;
+			// std::cout << xline << std::endl;
 		}
 		else if (action == "SEARCH")
 		{
 			phonebook.print_all_contacts();
-			std::cout << "Index of the contact : ";
-			std::cin >> search_idx;
-			phonebook.search_contact(search_idx);
-			std::cout << xline << std::endl;
+			while (true)
+			{
+				std::cout << "Index of the contact : ";
+				if (std::cin >> search_idx)
+				{
+					phonebook.search_contact(search_idx);
+					break ;
+				}
+				std::cout << "Invalid index." << std::endl;
+				std::cin.clear();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			}
 		}
 		else if (action == "EXIT")
 			std::cout << "Program exists." << std::endl;
