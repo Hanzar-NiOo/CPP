@@ -14,6 +14,30 @@ static std::string truncate(const std::string &str)
     return (str);
 }
 
+void    PhoneBook::print_all_contacts() const
+{
+    if (count == 0)
+    {
+        std::cout << "Phonebook is empty." << std::endl;
+        return ;
+    }
+    std::cout << std::right
+        << std::setw(10) << "Index" << "|"
+        << std::setw(10) << "First name" << "|"
+        << std::setw(10) << "Last name" << "|"
+        << std::setw(10) << "Nickname" << "|"
+        << std::endl;
+    for (int i = 0; i < count; i++)
+    {
+        std::cout << std::right
+            << std::setw(10) << i + 1 << "|"
+            << std::setw(10) << truncate(contacts[i].get_firstname()) << "|"
+            << std::setw(10) << truncate(contacts[i].get_lastname()) << "|"
+            << std::setw(10) << truncate(contacts[i].get_nickname()) << "|"
+            << std::endl;
+    }
+}
+
 void    PhoneBook::print_contacts(int search_idx) const
 {
     std::cout << std::right

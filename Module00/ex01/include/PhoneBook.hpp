@@ -16,6 +16,7 @@ class	PhoneBook
 		void    save_contact(const std::string &fName, const std::string &lName,
             const std::string &ncName, const std::string &phNum,
             const std::string &darkSide);
+		void    print_all_contacts() const;
 		void    print_contacts(int search_idx) const;
 		void    search_contact(int search_idx);
 };
