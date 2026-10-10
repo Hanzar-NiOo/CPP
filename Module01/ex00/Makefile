@@ -1,21 +1,25 @@
-NAME    = "BraiiiiiiinnnzzzZ"
-CXX     = c++
-CXXFLAGS = -Wall -Werror -Wextra -std=c++98
+NAME        = BraiiiiiiinnnzzzZ
 
-SRC     =   src/main.cpp  src/Zombie.cpp src/newZombie.cpp src/randomChump.cpp
+CXX         = c++
+CXXFLAGS    = -Wall -Wextra -Werror -std=c++98
 
-OBJ     = $(SRC:.cpp=.o)
+SRCS        = src/main.cpp \
+              src/Zombie.cpp \
+              src/newZombie.cpp \
+              src/randomChump.cpp
+
+OBJS        = $(SRCS:.cpp=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ)
+$(NAME): $(OBJS)
+	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -I include -c $< -o $@
 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJS)
 
 fclean: clean
 	rm -f $(NAME)
