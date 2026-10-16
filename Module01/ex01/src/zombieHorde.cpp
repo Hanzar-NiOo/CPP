@@ -5,10 +5,8 @@ Zombie* zombieHorde(int N, std::string name) {
         return (NULL);
     }
 
-    // Allocate N zombies in a single allocation
     Zombie* horde = new Zombie[N];
 
-    // Initialize each zombie with the provided name
     for (int i = 0; i < N; ++i) {
         horde[i].setName(name);
     }
