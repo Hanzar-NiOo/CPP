@@ -1,7 +1,7 @@
-NAME      := ex02
+NAME      := ex03
 CXX       := c++
 CXXFLAGS := -Wall -Wextra -Werror -std=c++98
-SRCS      := src/ClapTrap.cpp src/main.cpp src/ScavTrap.cpp src/FragTrap.cpp
+SRCS      := src/ClapTrap.cpp src/main.cpp src/ScavTrap.cpp src/FragTrap.cpp src/DiamondTrap.cpp
 OBJS      := $(SRCS:.cpp=.o)
 
 all: $(NAME)
