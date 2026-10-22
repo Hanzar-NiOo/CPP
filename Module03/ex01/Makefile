@@ -1,7 +1,7 @@
-NAME      := a.out
+NAME      := ex01
 CXX       := c++
 CXXFLAGS := -Wall -Wextra -Werror -std=c++98
-SRCS      := $(wildcard *.cpp)
+SRCS      := src/ClapTrap.cpp src/main.cpp src/ScavTrap.cpp
 OBJS      := $(SRCS:.cpp=.o)
 
 all: $(NAME)
@@ -10,7 +10,7 @@ $(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -I include -c $< -o $@
 
 clean:
 	rm -f $(OBJS) $(NAME)
