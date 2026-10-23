@@ -1,80 +1,84 @@
+#include <iostream>
 #include "Animal.hpp"
-#include "Cat.hpp"
 #include "Dog.hpp"
+#include "Cat.hpp"
 #include "WrongAnimal.hpp"
 #include "WrongCat.hpp"
 
-#include <iostream>
-
-static void testSubjectExample()
+static void title(const std::string& s)
 {
-	std::cout << "--- testSubjectExample ---" << std::endl;
-
-	const Animal *meta = new Animal();
-	const Animal *j = new Dog();
-	const Animal *i = new Cat();
-	std::cout << j->getType() << " " << std::endl;
-	std::cout << i->getType() << " " << std::endl;
-	i->makeSound(); // will output the cat sound!
-	j->makeSound();
-	meta->makeSound();
-
-	delete meta;
-	delete j;
-	delete i;
-}
-
-static void testWrongCat()
-{
-	std::cout << "--- testWrongCat ---" << std::endl;
-	std::cout << "(the WrongCat does not override makeSound, so it uses the WrongAnimal one)" << std::endl;
-
-	const WrongAnimal *wmeta = new WrongAnimal();
-	const WrongAnimal *wcat = new WrongCat();
-	std::cout << wcat->getType() << " " << std::endl;
-	wcat->makeSound(); // will output the wrong animal sound!
-	wmeta->makeSound();
-
-	delete wmeta;
-	delete wcat;
-}
-
-static void testDestructionThroughBasePointer()
-{
-	std::cout << "--- testDestructionThroughBasePointer ---" << std::endl;
-	std::cout << "(the virtual destructor is called, then the base class destructor)" << std::endl;
-
-	Animal *animals[3];
-	animals[0] = new Dog();
-	animals[1] = new Cat();
-	animals[2] = new Animal();
-
-	for (int i = 0; i < 3; i++)
-		delete animals[i];
-}
-
-static void testCopy()
-{
-	std::cout << "--- testCopy ---" << std::endl;
-
-	Dog original;
-	Dog copy(original);
-	copy.makeSound();
-
-	Cat assigned;
-	Cat other = assigned;
-	other.makeSound();
+    std::cout << "\n===== " << s << " =====" << std::endl;
 }
 
 int main()
 {
-	std::cout << "=== Module 04 - ex00: Polymorphism ===" << std::endl;
+    title("1. Subject test");
+    {
+        const Animal* meta = new Animal();
+        const Animal* j = new Dog();
+        const Animal* i = new Cat();
 
-	testSubjectExample();
-	testWrongCat();
-	testDestructionThroughBasePointer();
-	testCopy();
+        std::cout << j->getType() << " " << std::endl;
+        std::cout << i->getType() << " " << std::endl;
+        i->makeSound();
+        j->makeSound();
+        meta->makeSound();
 
-	std::cout << "=== ex00 done ===" << std::endl;
-	return (0);
+        delete meta;
+        delete j;
+        delete i;
+    }
+
+    title("2. Wrong classes (no virtual)");
+    {
+        const WrongAnimal* w = new WrongCat();
+        std::cout << w->getType() << std::endl;
+        w->makeSound();                    // WrongAnimal sound!
+
+        const WrongCat* wc = new WrongCat();
+        wc->makeSound();                   // WrongCat sound (static type is WrongCat)
+
+        delete w;
+        delete wc;
+    }
+
+    title("3. Objects on the stack");
+    {
+        Dog d;
+        Cat c;
+        d.makeSound();
+        c.makeSound();
+    }
+
+    title("4. Copy constructor and assignment");
+    {
+        Dog a;
+        Dog b(a);          // copy constructor
+        Dog c;
+        c = a;             // copy assignment
+        std::cout << b.getType() << " / " << c.getType() << std::endl;
+        b.makeSound();
+    }
+
+    title("5. Array of Animal*");
+    {
+        const Animal* zoo[4];
+        zoo[0] = new Dog();
+        zoo[1] = new Cat();
+        zoo[2] = new Dog();
+        zoo[3] = new Cat();
+        for (int k = 0; k < 4; k++)
+            zoo[k]->makeSound();
+        for (int k = 0; k < 4; k++)
+            delete zoo[k];
+    }
+
+    title("6. Reference (polymorphism works with references too)");
+    {
+        Dog d;
+        const Animal& ref = d;
+        ref.makeSound();
+    }
+
+    return 0;
 }

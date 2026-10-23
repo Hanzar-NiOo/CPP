@@ -1,17 +1,17 @@
 #ifndef DOG_HPP
-#define DOG_HPP
+# define DOG_HPP
 
-#include "Animal.hpp"
+# include "Animal.hpp"
 
 class Dog : public Animal
 {
 public:
-	Dog();
-	Dog(Dog const & other);
-	Dog & operator=(Dog const & other);
-	virtual ~Dog();
+    Dog();
+    Dog(const Dog& other);
+    Dog& operator=(const Dog& other);
+    ~Dog();
 
-	virtual void makeSound() const;
+    void makeSound() const;   // overrides Animal::makeSound
 };
 
 #endif
