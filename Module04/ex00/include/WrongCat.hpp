@@ -3,7 +3,6 @@
 
 # include "WrongAnimal.hpp"
 
-// WrongCat.hpp
 class WrongCat : public WrongAnimal
 {
 public:
