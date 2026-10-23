@@ -1,86 +1,111 @@
 #include "Animal.hpp"
-#include "Brain.hpp"
-#include "Cat.hpp"
 #include "Dog.hpp"
+#include "Cat.hpp"
+#include "Brain.hpp"
 
-#include <iostream>
-
-static void testSubjectExample()
+static void title(const std::string& s)
 {
-	std::cout << "--- testSubjectExample ---" << std::endl;
-
-	const Animal *j = new Dog();
-	const Animal *i = new Cat();
-	delete j; // should not create a leak
-	delete i;
-}
-
-static void testArrayOfAnimals()
-{
-	std::cout << "--- testArrayOfAnimals ---" << std::endl;
-	std::cout << "(an array of 10 animals, half of them dogs and half of them cats)" << std::endl;
-
-	Animal *animals[10];
-	for (int i = 0; i < 10; i++)
-	{
-		if (i % 2 == 0)
-		{
-			Dog *dog = new Dog();
-			dog->setIdea(i, "I want to play!");
-			animals[i] = dog;
-		}
-		else
-		{
-			Cat *cat = new Cat();
-			cat->setIdea(i, "I want some food!");
-			animals[i] = cat;
-		}
-	}
-
-	for (int i = 0; i < 10; i++)
-	{
-		std::cout << "animal " << i << " is a " << animals[i]->getType() << std::endl;
-		animals[i]->makeSound();
-	}
-
-	std::cout << "(every animal is deleted through an Animal pointer)" << std::endl;
-	for (int i = 0; i < 10; i++)
-		delete animals[i];
-}
-
-static void testDeepCopy()
-{
-	std::cout << "--- testDeepCopy ---" << std::endl;
-	std::cout << "(a copy of a dog or a cat must not be shallow)" << std::endl;
-
-	Dog original;
-	original.setIdea(0, "I want to play!");
-
-	Dog copy(original);
-	copy.setIdea(0, "I want to sleep!");
-
-	std::cout << "the original dog thinks: " << original.getIdea(0) << std::endl;
-	std::cout << "the copy of the dog thinks: " << copy.getIdea(0) << std::endl;
-
-	Cat catOriginal;
-	catOriginal.setIdea(0, "I want some food!");
-
-	Cat catCopy;
-	catCopy = catOriginal;
-	catCopy.setIdea(0, "I want to nap!");
-
-	std::cout << "the original cat thinks: " << catOriginal.getIdea(0) << std::endl;
-	std::cout << "the copy of the cat thinks: " << catCopy.getIdea(0) << std::endl;
+    std::cout << "\n===== " << s << " =====" << std::endl;
 }
 
 int main()
 {
-	std::cout << "=== Module 04 - ex01: I don't want to set the world on fire ===" << std::endl;
+    title("1. Subject test (no leak)");
+    {
+        const Animal* j = new Dog();
+        const Animal* i = new Cat();
+        delete j;
+        delete i;
+    }
 
-	testSubjectExample();
-	testArrayOfAnimals();
-	testDeepCopy();
+    title("2. Array of Animals: half Dogs, half Cats");
+    {
+        const int N = 10;
+        Animal* zoo[N];
 
-	std::cout << "=== ex01 done ===" << std::endl;
-	return (0);
+        for (int k = 0; k < N; k++)
+        {
+            if (k < N / 2)
+                zoo[k] = new Dog();
+            else
+                zoo[k] = new Cat();
+        }
+        for (int k = 0; k < N; k++)
+            zoo[k]->makeSound();
+        for (int k = 0; k < N; k++)
+            delete zoo[k];          // deleted as Animal*
+    }
+
+    title("3. Deep copy: copy constructor (Dog)");
+    {
+        Dog original;
+        original.getBrain()->setIdea(0, "chase the ball");
+
+        Dog copy(original);
+
+        std::cout << "original brain: " << original.getBrain() << std::endl;
+        std::cout << "copy brain:     " << copy.getBrain() << std::endl;
+        // The two addresses must be DIFFERENT.
+
+        copy.getBrain()->setIdea(0, "sleep");
+        std::cout << "original idea 0: " << original.getBrain()->getIdea(0) << std::endl;
+        std::cout << "copy idea 0:     " << copy.getBrain()->getIdea(0) << std::endl;
+        // original must still say "chase the ball".
+    }
+
+    title("4. Deep copy: assignment operator (Cat)");
+    {
+        Cat a;
+        Cat b;
+        a.getBrain()->setIdea(0, "knock the glass off the table");
+        b.getBrain()->setIdea(0, "nap");
+
+        b = a;
+
+        a.getBrain()->setIdea(0, "ignore everyone");
+        std::cout << "a idea 0: " << a.getBrain()->getIdea(0) << std::endl;
+        std::cout << "b idea 0: " << b.getBrain()->getIdea(0) << std::endl;
+        // b must still say "knock the glass off the table".
+    }
+
+    title("5. Copy outlives the original");
+    {
+        Dog* original = new Dog();
+        original->getBrain()->setIdea(5, "bone");
+        Dog* copy = new Dog(*original);
+        delete original;            // would break a shallow copy
+        std::cout << "copy idea 5: " << copy->getBrain()->getIdea(5) << std::endl;
+        delete copy;
+    }
+
+    title("6. Self-assignment");
+    {
+        Dog d;
+        d.getBrain()->setIdea(0, "still here");
+        Dog& ref = d;
+        d = ref;
+        std::cout << d.getBrain()->getIdea(0) << std::endl;
+    }
+
+    title("7. Copy through a base pointer");
+    {
+        Dog d;
+        const Animal* a = new Dog(d);   // copy made from a real Dog
+        a->makeSound();
+        delete a;
+    }
+
+    title("8. Brain on its own");
+    {
+        Brain b1;
+        b1.setIdea(0, "idea A");
+        b1.setIdea(99, "last idea");
+        Brain b2(b1);
+        b2.setIdea(0, "idea B");
+        std::cout << b1.getIdea(0) << " / " << b2.getIdea(0) << " / "
+                  << b2.getIdea(99) << std::endl;
+        std::cout << "out of range: [" << b1.getIdea(100) << "]" << std::endl;
+    }
+
+    return 0;
 }

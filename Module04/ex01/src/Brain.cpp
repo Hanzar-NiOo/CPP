@@ -1,47 +1,43 @@
 #include "Brain.hpp"
 
-#include <iostream>
-
 Brain::Brain()
 {
-	for (int i = 0; i < 100; i++)
-		ideas[i] = "";
-	std::cout << "Brain: a new brain has been created." << std::endl;
+    std::cout << "[Brain] default constructor called" << std::endl;
 }
 
-Brain::Brain(Brain const & other)
+Brain::Brain(const Brain& other)
 {
-	for (int i = 0; i < 100; i++)
-		ideas[i] = other.ideas[i];
-	std::cout << "Brain: a copy of a brain has been created." << std::endl;
+    std::cout << "[Brain] copy constructor called" << std::endl;
+    for (int i = 0; i < 100; i++)
+        ideas[i] = other.ideas[i];
 }
 
-Brain & Brain::operator=(Brain const & other)
+Brain& Brain::operator=(const Brain& other)
 {
-	if (this != &other)
-	{
-		for (int i = 0; i < 100; i++)
-			ideas[i] = other.ideas[i];
-		std::cout << "Brain: a brain has been assigned from another brain." << std::endl;
-	}
-	return (*this);
+    std::cout << "[Brain] copy assignment called" << std::endl;
+    if (this != &other)
+    {
+        for (int i = 0; i < 100; i++)
+            ideas[i] = other.ideas[i];
+    }
+    return *this;
 }
 
 Brain::~Brain()
 {
-	std::cout << "Brain: a brain has been destroyed." << std::endl;
+    std::cout << "[Brain] destructor called" << std::endl;
 }
 
-std::string Brain::getIdea(int index) const
+void Brain::setIdea(int index, const std::string& idea)
 {
-	if (index < 0 || index >= 100)
-		return (std::string(""));
-	return (ideas[index]);
+    if (index >= 0 && index < 100)
+        ideas[index] = idea;
 }
 
-void Brain::setIdea(int index, std::string const & idea)
+const std::string& Brain::getIdea(int index) const
 {
-	if (index < 0 || index >= 100)
-		return;
-	ideas[index] = idea;
+    static const std::string empty;
+    if (index < 0 || index >= 100)
+        return empty;
+    return ideas[index];
 }

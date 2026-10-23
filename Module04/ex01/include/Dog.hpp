@@ -1,24 +1,23 @@
 #ifndef DOG_HPP
-#define DOG_HPP
+# define DOG_HPP
 
-#include "Animal.hpp"
-#include "Brain.hpp"
+# include "Animal.hpp"
+# include "Brain.hpp"
 
 class Dog : public Animal
 {
-public:
-	Dog();
-	Dog(Dog const & other);
-	Dog & operator=(Dog const & other);
-	virtual ~Dog();
-
-	virtual void makeSound() const;
-
-	std::string getIdea(int index) const;
-	void setIdea(int index, std::string const & idea);
-
 private:
-	Brain *brain;
+    Brain* brain;
+
+public:
+    Dog();
+    Dog(const Dog& other);
+    Dog& operator=(const Dog& other);
+    ~Dog();
+
+    void makeSound() const;
+
+    Brain* getBrain() const;   // handy for tests: lets you compare addresses
 };
 
 #endif
