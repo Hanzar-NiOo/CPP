@@ -1,51 +1,41 @@
 #include "Dog.hpp"
 
-#include <iostream>
-
-Dog::Dog()
-	: Animal(),
-	  brain(new Brain())
+Dog::Dog() : AAnimal(), brain(new Brain())
 {
-	type = "Dog";
-	std::cout << "Dog: a dog has been created." << std::endl;
+    type = "Dog";
+    std::cout << "[Dog] default constructor called" << std::endl;
 }
 
-Dog::Dog(Dog const & other)
-	: Animal(other),
-	  brain(new Brain(*other.brain))
+Dog::Dog(const Dog& other) : AAnimal(other), brain(new Brain(*other.brain))
 {
-	std::cout << "Dog: a copy of a dog has been created." << std::endl;
+    std::cout << "[Dog] copy constructor called" << std::endl;
 }
 
-Dog & Dog::operator=(Dog const & other)
+Dog& Dog::operator=(const Dog& other)
 {
-	if (this != &other)
-	{
-		Animal::operator=(other);
-		delete brain;
-		brain = new Brain(*other.brain);
-		std::cout << "Dog: a dog has been assigned from another dog." << std::endl;
-	}
-	return (*this);
+    std::cout << "[Dog] copy assignment called" << std::endl;
+    if (this != &other)
+    {
+        AAnimal::operator=(other);
+        Brain* newBrain = new Brain(*other.brain);  // allocate first
+        delete brain;                               // then free the old one
+        brain = newBrain;
+    }
+    return *this;
 }
 
 Dog::~Dog()
 {
-	std::cout << "Dog: the dog has been destroyed." << std::endl;
-	delete brain;
+    delete brain;
+    std::cout << "[Dog] destructor called" << std::endl;
 }
 
 void Dog::makeSound() const
 {
-	std::cout << "Woof woof!" << std::endl;
+    std::cout << "Woof! Woof!" << std::endl;
 }
 
-std::string Dog::getIdea(int index) const
+Brain* Dog::getBrain() const
 {
-	return (brain->getIdea(index));
-}
-
-void Dog::setIdea(int index, std::string const & idea)
-{
-	brain->setIdea(index, idea);
+    return brain;
 }

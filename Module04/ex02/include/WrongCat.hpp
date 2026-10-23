@@ -1,15 +1,17 @@
 #ifndef WRONGCAT_HPP
-#define WRONGCAT_HPP
+# define WRONGCAT_HPP
 
-#include "WrongAnimal.hpp"
+# include "WrongAnimal.hpp"
 
 class WrongCat : public WrongAnimal
 {
 public:
-	WrongCat();
-	WrongCat(WrongCat const & other);
-	WrongCat & operator=(WrongCat const & other);
-	virtual ~WrongCat();
+    WrongCat();
+    WrongCat(const WrongCat& other);
+    WrongCat& operator=(const WrongCat& other);
+    ~WrongCat();
+
+    void makeSound() const;            // hides, does NOT override
 };
 
 #endif

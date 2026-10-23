@@ -1,7 +1,7 @@
 NAME      := ex02
 CXX       := c++
 CXXFLAGS := -Wall -Wextra -Werror -std=c++98
-SRCS      := src/Animal.cpp src/Cat.cpp src/Dog.cpp src/WrongAnimal.cpp src/WrongCat.cpp src/main.cpp src/Brain.cpp
+SRCS      := src/Animal.cpp src/Cat.cpp src/Dog.cpp src/WrongAnimal.cpp src/WrongCat.cpp src/main.cpp src/Brain.cpp src/AAnimal.cpp
 OBJS      := $(SRCS:.cpp=.o)
 
 all: $(NAME)

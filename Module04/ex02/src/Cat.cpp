@@ -1,51 +1,41 @@
 #include "Cat.hpp"
 
-#include <iostream>
-
-Cat::Cat()
-	: Animal(),
-	  brain(new Brain())
+Cat::Cat() : AAnimal(), brain(new Brain())
 {
-	type = "Cat";
-	std::cout << "Cat: a cat has been created." << std::endl;
+    type = "Cat";
+    std::cout << "[Cat] default constructor called" << std::endl;
 }
 
-Cat::Cat(Cat const & other)
-	: Animal(other),
-	  brain(new Brain(*other.brain))
+Cat::Cat(const Cat& other) : AAnimal(other), brain(new Brain(*other.brain))
 {
-	std::cout << "Cat: a copy of a cat has been created." << std::endl;
+    std::cout << "[Cat] copy constructor called" << std::endl;
 }
 
-Cat & Cat::operator=(Cat const & other)
+Cat& Cat::operator=(const Cat& other)
 {
-	if (this != &other)
-	{
-		Animal::operator=(other);
-		delete brain;
-		brain = new Brain(*other.brain);
-		std::cout << "Cat: a cat has been assigned from another cat." << std::endl;
-	}
-	return (*this);
+    std::cout << "[Cat] copy assignment called" << std::endl;
+    if (this != &other)
+    {
+        AAnimal::operator=(other);
+        Brain* newBrain = new Brain(*other.brain);  // allocate first
+        delete brain;                               // then free the old one
+        brain = newBrain;
+    }
+    return *this;
 }
 
 Cat::~Cat()
 {
-	std::cout << "Cat: the cat has been destroyed." << std::endl;
-	delete brain;
+    delete brain;
+    std::cout << "[Cat] destructor called" << std::endl;
 }
 
 void Cat::makeSound() const
 {
-	std::cout << "Meow meow!" << std::endl;
+    std::cout << "Meow~" << std::endl;
 }
 
-std::string Cat::getIdea(int index) const
+Brain* Cat::getBrain() const
 {
-	return (brain->getIdea(index));
-}
-
-void Cat::setIdea(int index, std::string const & idea)
-{
-	brain->setIdea(index, idea);
+    return brain;
 }
