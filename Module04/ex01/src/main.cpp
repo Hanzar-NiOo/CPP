@@ -2,6 +2,8 @@
 #include "Dog.hpp"
 #include "Cat.hpp"
 #include "Brain.hpp"
+#include "WrongAnimal.hpp"
+#include "WrongCat.hpp"
 
 static void title(const std::string& s)
 {
