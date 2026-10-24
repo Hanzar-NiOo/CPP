@@ -1,23 +1,31 @@
 #include "Cure.hpp"
 #include "ICharacter.hpp"
-
 #include <iostream>
 
-Cure::Cure()
-	: AMateria("cure")
+Cure::Cure() : AMateria("cure")
 {
+}
+
+Cure::Cure(const Cure& other) : AMateria(other)
+{
+}
+
+Cure& Cure::operator=(const Cure& other)
+{
+    AMateria::operator=(other);
+    return *this;
 }
 
 Cure::~Cure()
 {
 }
 
-AMateria *Cure::clone() const
+AMateria* Cure::clone() const
 {
-	return (new Cure());
+    return new Cure(*this);      // a new Cure, same type
 }
 
-void Cure::use(ICharacter &target)
+void Cure::use(ICharacter& target)
 {
-	std::cout << "* heals " << target.getName() << "'s wounds *" << std::endl;
+    std::cout << "* heals " << target.getName() << "'s wounds *" << std::endl;
 }

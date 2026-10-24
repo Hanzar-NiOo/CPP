@@ -1,99 +1,137 @@
 #include "Character.hpp"
-#include "AMateria.hpp"
 
-#include <iostream>
-
-Character::Character(std::string const & name)
-	: name_(name)
+Character::Character() : name("unnamed"), floor(0)
 {
-	for (int i = 0; i < 4; i++)
-		inventory_[i] = 0;
-	std::cout << "Character: " << name_ << " has been created." << std::endl;
+    for (int i = 0; i < 4; i++)
+        inventory[i] = 0;
 }
 
-Character::Character(Character const & other)
-	: name_(other.name_)
+Character::Character(std::string const & name) : name(name), floor(0)
 {
-	for (int i = 0; i < 4; i++)
-	{
-		if (other.inventory_[i])
-			inventory_[i] = other.inventory_[i]->clone();
-		else
-			inventory_[i] = 0;
-	}
-	std::cout << "Character: a copy of " << name_ << " has been created." << std::endl;
+    for (int i = 0; i < 4; i++)
+        inventory[i] = 0;
 }
 
-Character & Character::operator=(Character const & other)
+Character::Character(const Character& other) : name(other.name), floor(0)
 {
-	if (this != &other)
-	{
-		// the old materias are deleted before the new ones are added
-		for (int i = 0; i < 4; i++)
-		{
-			delete inventory_[i];
-			inventory_[i] = 0;
-		}
-		name_ = other.name_;
-		for (int i = 0; i < 4; i++)
-		{
-			if (other.inventory_[i])
-				inventory_[i] = other.inventory_[i]->clone();
-		}
-		std::cout << "Character: " << name_ << " has been assigned from another character." << std::endl;
-	}
-	return (*this);
+    for (int i = 0; i < 4; i++)
+    {
+        if (other.inventory[i])
+            inventory[i] = other.inventory[i]->clone();   // deep copy
+        else
+            inventory[i] = 0;
+    }
+}
+
+Character& Character::operator=(const Character& other)
+{
+    if (this != &other)
+    {
+        clearInventory();               // delete old Materias FIRST (subject)
+        name = other.name;
+        for (int i = 0; i < 4; i++)
+        {
+            if (other.inventory[i])
+                inventory[i] = other.inventory[i]->clone();
+            else
+                inventory[i] = 0;
+        }
+    }
+    return *this;
 }
 
 Character::~Character()
 {
-	for (int i = 0; i < 4; i++)
-		delete inventory_[i];
-	std::cout << "Character: " << name_ << " has been destroyed." << std::endl;
+    clearInventory();
+    clearFloor();
 }
 
 std::string const & Character::getName() const
 {
-	return (name_);
+    return name;
 }
 
-void Character::equip(AMateria *m)
+void Character::equip(AMateria* m)
 {
-	if (!m)
-		return;
-	for (int i = 0; i < 4; i++)
-	{
-		if (!inventory_[i])
-		{
-			inventory_[i] = m;
-			std::cout << "Character: " << name_ << " equips a " << m->getType()
-					  << " materia in slot " << i << "." << std::endl;
-			return;
-		}
-	}
-	std::cout << "Character: " << name_ << " cannot equip that materia, the inventory is full." << std::endl;
+    if (!m)
+        return;
+    for (int i = 0; i < 4; i++)         // already equipped? would be a double delete
+        if (inventory[i] == m)
+            return;
+    for (int i = 0; i < 4; i++)         // first empty slot, 0 to 3
+    {
+        if (!inventory[i])
+        {
+            removeFromFloor(m);         // in case it was unequipped earlier
+            inventory[i] = m;
+            return;
+        }
+    }
+    // inventory full: nothing happens (the caller still owns m)
 }
 
 void Character::unequip(int idx)
 {
-	if (idx < 0 || idx > 3 || !inventory_[idx])
-		return;
-	std::cout << "Character: " << name_ << " unequips the " << inventory_[idx]->getType()
-			  << " materia from slot " << idx << "." << std::endl;
-	// the materia is not deleted, it is left on the floor
-	inventory_[idx] = 0;
+    if (idx < 0 || idx > 3 || !inventory[idx])
+        return;
+    addToFloor(inventory[idx]);         // save the address BEFORE clearing the slot
+    inventory[idx] = 0;                 // NO delete
 }
 
-void Character::use(int idx, ICharacter &target)
+void Character::use(int idx, ICharacter& target)
 {
-	if (idx < 0 || idx > 3 || !inventory_[idx])
-		return;
-	inventory_[idx]->use(target);
+    if (idx < 0 || idx > 3 || !inventory[idx])
+        return;
+    inventory[idx]->use(target);
 }
 
-AMateria *Character::getMateria(int idx) const
+AMateria* Character::getMateria(int idx) const
 {
-	if (idx < 0 || idx > 3)
-		return (0);
-	return (inventory_[idx]);
+    if (idx < 0 || idx > 3)
+        return 0;
+    return inventory[idx];
+}
+
+void Character::clearInventory()
+{
+    for (int i = 0; i < 4; i++)
+    {
+        delete inventory[i];            // delete on 0 is safe
+        inventory[i] = 0;
+    }
+}
+
+void Character::clearFloor()
+{
+    while (floor)
+    {
+        FloorNode* node = floor;
+        floor = node->next;
+        delete node->materia;
+        delete node;
+    }
+}
+
+void Character::addToFloor(AMateria* m)
+{
+    FloorNode* node = new FloorNode;
+    node->materia = m;
+    node->next = floor;
+    floor = node;
+}
+
+void Character::removeFromFloor(AMateria* m)
+{
+    FloorNode** cur = &floor;
+    while (*cur)
+    {
+        if ((*cur)->materia == m)
+        {
+            FloorNode* tmp = *cur;
+            *cur = tmp->next;
+            delete tmp;                 // delete the node, NOT the Materia
+            return;
+        }
+        cur = &(*cur)->next;
+    }
 }

@@ -1,25 +1,28 @@
 #include "AMateria.hpp"
-#include "ICharacter.hpp"
 
-#include <iostream>
-
-AMateria::AMateria(std::string const & type)
-	: type_(type)
+AMateria::AMateria(std::string const & type) : type(type)
 {
-	std::cout << "AMateria: a new " << type_ << " materia has been created." << std::endl;
+}
+
+AMateria::AMateria(const AMateria& other) : type(other.type)
+{
+}
+
+AMateria& AMateria::operator=(const AMateria& other)
+{
+    (void)other;
+    return *this;
 }
 
 AMateria::~AMateria()
 {
-	std::cout << "AMateria: the " << type_ << " materia has been destroyed." << std::endl;
 }
 
 std::string const & AMateria::getType() const
 {
-	return (type_);
+    return type;
 }
 
-void AMateria::use(ICharacter &target)
+void AMateria::use(ICharacter&)
 {
-	std::cout << "* uses the " << type_ << " materia on " << target.getName() << " *" << std::endl;
 }

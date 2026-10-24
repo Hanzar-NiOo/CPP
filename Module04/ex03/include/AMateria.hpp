@@ -1,22 +1,25 @@
 #ifndef AMATERIA_HPP
-#define AMATERIA_HPP
+# define AMATERIA_HPP
 
-#include <string>
+# include <string>
 
-class ICharacter;
+class ICharacter;   // forward declaration
 
 class AMateria
 {
-public:
-	AMateria(std::string const & type);
-	virtual ~AMateria();
+	protected:
+		std::string type;
 
-	std::string const & getType() const;
-	virtual AMateria *clone() const = 0;
-	virtual void use(ICharacter &target);
+	public:
+		AMateria(std::string const & type);
+		AMateria(const AMateria& other);
+		AMateria& operator=(const AMateria& other);
+		virtual ~AMateria();
 
-protected:
-	std::string type_;
+		std::string const & getType() const;
+
+		virtual AMateria* clone() const = 0;
+		virtual void use(ICharacter& target);
 };
 
 #endif
