@@ -8,21 +8,21 @@
 
 class PresidentialPardonForm : public AForm
 {
-private:
-	std::string	_target;
+	private:
+		std::string	_target;
 
-protected:
-	virtual void	executeAction() const;
+	protected:
+		virtual void	executeAction() const;
 
-public:
-	// Orthodox Canonical Form
-	PresidentialPardonForm();
-	PresidentialPardonForm(const PresidentialPardonForm &other);
-	PresidentialPardonForm &operator=(const PresidentialPardonForm &other);
-	virtual ~PresidentialPardonForm();
+	public:
+		// Orthodox Canonical Form
+		PresidentialPardonForm();
+		PresidentialPardonForm(const PresidentialPardonForm &other);
+		PresidentialPardonForm &operator=(const PresidentialPardonForm &other);
+		virtual ~PresidentialPardonForm();
 
-	// Parameterized function
-	PresidentialPardonForm(const std::string &target);
+		// Parameterized function
+		PresidentialPardonForm(const std::string &target);
 };
 
 #endif

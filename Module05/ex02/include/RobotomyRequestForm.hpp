@@ -8,21 +8,21 @@
 
 class RobotomyRequestForm : public AForm
 {
-private:
-	std::string	_target;
+	private:
+		std::string	_target;
 
-protected:
-	virtual void	executeAction() const;
+	protected:
+		virtual void	executeAction() const;
 
-public:
-	// Orthodox Canonical Form
-	RobotomyRequestForm();
-	RobotomyRequestForm(const RobotomyRequestForm &other);
-	RobotomyRequestForm &operator=(const RobotomyRequestForm &other);
-	virtual ~RobotomyRequestForm();
+	public:
+		// Orthodox Canonical Form
+		RobotomyRequestForm();
+		RobotomyRequestForm(const RobotomyRequestForm &other);
+		RobotomyRequestForm &operator=(const RobotomyRequestForm &other);
+		virtual ~RobotomyRequestForm();
 
-	// Parameterized instructor
-	RobotomyRequestForm(const std::string &target);
+		// Parameterized instructor
+		RobotomyRequestForm(const std::string &target);
 };
 
 #endif
