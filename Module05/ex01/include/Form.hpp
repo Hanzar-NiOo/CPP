@@ -31,8 +31,10 @@ class Form
 		int					getGradeToSign() const;
 		int					getGradeToExecute() const;
 	
+		// Member function
 		void	beSigned(const Bureaucrat &b);
 	
+		// Exceptions
 		class GradeTooHighException : public std::exception
 		{
 			public:
