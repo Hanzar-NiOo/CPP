@@ -68,14 +68,14 @@ namespace
         return (end - dot - 1 < 1) ? 1 : static_cast<int>(end - dot - 1);
     }
 
+    bool isNan(double d) { return d != d; }
+    bool isInf(double d) { return !isNan(d) && (d > DBL_MAX || d < -DBL_MAX); }
+
     // int is representable only in [-2^31, 2^31)
     bool fitsInt(double d)
     {
         return !isNan(d) && d >= -2147483648.0 && d < 2147483648.0;
     }
-
-    bool isNan(double d) { return d != d; }
-    bool isInf(double d) { return !isNan(d) && (d > DBL_MAX || d < -DBL_MAX); }
 
 	// Type detection functions
 	bool	isChar(const std::string &literal)
