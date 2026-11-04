@@ -44,8 +44,6 @@ AForm *Intern::createPardon(const std::string &target)
 AForm *Intern::makeForm(const std::string &formName,
 	const std::string &target) const
 {
-	// Lookup table: a form name paired with the function that builds it.
-	// Supporting a new form means adding one line here.
 	struct FormEntry
 	{
 		const char	*name;
