@@ -29,7 +29,24 @@ namespace
 		INVALID
 	};
 
-	// Type detection functions
+	// Helper functions
+	bool 	isReal(const std::string &literal, size_t end)
+    {
+        size_t i = 0, dots = 0, digits = 0;
+        if (end > 0 && (literal[0] == '+' || literal[0] == '-'))
+            i++;
+        for (; i < end; i++)
+        {
+            if (literal[i] == '.')
+                dots++;
+            else if (std::isdigit(static_cast<unsigned char>(literal[i])))
+                digits++;
+            else
+                return false;
+        }
+        return dots == 1 && digits > 0;
+    }
+
 	bool	isFloatPseudo(const std::string &literal)
 	{
 		return (literal == "nanf" || literal == "+inff" || literal == "-inff");
@@ -40,6 +57,27 @@ namespace
 		return (literal == "nan" || literal == "+inf" || literal == "-inf");
 	}
 
+	int decimals(const std::string &literal)
+    {
+        size_t dot = literal.find('.');
+        size_t end = literal.size();
+        if (dot == std::string::npos)
+            return 1;
+        if (literal[end - 1] == 'f')
+            end--;
+        return (end - dot - 1 < 1) ? 1 : static_cast<int>(end - dot - 1);
+    }
+
+    // int is representable only in [-2^31, 2^31)
+    bool fitsInt(double d)
+    {
+        return !isNan(d) && d >= -2147483648.0 && d < 2147483648.0;
+    }
+
+    bool isNan(double d) { return d != d; }
+    bool isInf(double d) { return !isNan(d) && (d > DBL_MAX || d < -DBL_MAX); }
+
+	// Type detection functions
 	bool	isChar(const std::string &literal)
 	{
 		if (literal.length() == 3 && literal[0] == '\'' && literal[2] == '\'')
@@ -60,29 +98,12 @@ namespace
 		return (true);
 	}
 
-	bool isReal(const std::string &literal, size_t end)
-    {
-        size_t i = 0, dots = 0, digits = 0;
-        if (end > 0 && (literal[0] == '+' || literal[0] == '-'))
-            i++;
-        for (; i < end; i++)
-        {
-            if (literal[i] == '.')
-                dots++;
-            else if (std::isdigit(static_cast<unsigned char>(literal[i])))
-                digits++;
-            else
-                return false;
-        }
-        return dots == 1 && digits > 0;
-    }
-
-	bool isDouble(const std::string &literal)
+	bool 	isDouble(const std::string &literal)
 	{
 		return isDoublePseudo(literal) || isReal(literal, literal.size());
 	}
 
-	bool isFloat(const std::string &literal)
+	bool 	isFloat(const std::string &literal)
 	{
 		if (isFloatPseudo(literal))
             return true;
@@ -99,28 +120,8 @@ namespace
 		return INVALID;
 	}
 
-	// Helper functions
-	int decimals(const std::string &literal)
-    {
-        size_t dot = literal.find('.');
-        size_t end = literal.size();
-        if (dot == std::string::npos)
-            return 1;
-        if (literal[end - 1] == 'f')
-            end--;
-        return (end - dot - 1 < 1) ? 1 : static_cast<int>(end - dot - 1);
-    }
-
-    bool isNan(double d) { return d != d; }
-    bool isInf(double d) { return !isNan(d) && (d > DBL_MAX || d < -DBL_MAX); }
-
-    // int is representable only in [-2^31, 2^31)
-    bool fitsInt(double d)
-    {
-        return !isNan(d) && d >= -2147483648.0 && d < 2147483648.0;
-    }
-
-    void printCharValue(int c)   // c already known to be in 0..127
+	// Print functions
+    void 	printCharValue(int c)   // c already known to be in 0..127
     {
         if (!std::isprint(c))
             std::cout << "Non displayable";
@@ -128,7 +129,7 @@ namespace
             std::cout << "'" << static_cast<char>(c) << "'";
     }
 
-    void printFloat(float f, int prec)
+    void 	printFloat(float f, int prec)
     {
         if (isNan(f))
             std::cout << "nanf";
@@ -138,7 +139,7 @@ namespace
             std::cout << std::fixed << std::setprecision(prec) << f << "f";
     }
 
-    void printDouble(double d, int prec)
+    void 	printDouble(double d, int prec)
     {
         if (isNan(d))
             std::cout << "nan";
