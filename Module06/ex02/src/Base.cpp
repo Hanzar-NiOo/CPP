@@ -33,7 +33,7 @@ void identify(Base *p)
 	else
 		std::cout << "unknown" << std::endl;
 }
- 
+
 // Reference version: no pointers allowed, and <typeinfo> is forbidden,
 // so we cannot name std::bad_cast. A failed dynamic_cast on a reference
 // throws, so we catch everything with catch (...).

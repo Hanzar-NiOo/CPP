@@ -1,9 +1,7 @@
 #include "Base.hpp"
 
 int main()
-{
-	std::srand(static_cast<unsigned int>(std::time(NULL)));
- 
+{ 
 	std::cout << "--- fixed objects ---" << std::endl;
 	A a;
 	B b;
