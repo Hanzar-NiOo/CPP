@@ -2,7 +2,7 @@
 #include <iostream>
 
 int main()
-{
+{	
 	Data data;
 	data.id = 42;
 	data.name = "serialization";
